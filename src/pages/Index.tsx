@@ -5,6 +5,7 @@ import BlogCard from '@/components/BlogCard';
 import BlogForm from '@/components/BlogForm';
 import BlogDetail from '@/components/BlogDetail';
 import DeleteConfirmDialog from '@/components/DeleteConfirmDialog';
+import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { Plus, PenLine } from 'lucide-react';
 
@@ -97,10 +98,13 @@ const Index = () => {
               Thoughts, stories, and ideas
             </p>
           </div>
-          <Button onClick={handleAddNew} className="gap-2">
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Button onClick={handleAddNew} className="gap-2">
             <Plus className="h-4 w-4" />
-            <span className="hidden sm:inline">New Post</span>
-          </Button>
+              <span className="hidden sm:inline">New Post</span>
+            </Button>
+          </div>
         </header>
 
         {/* Blog List */}
