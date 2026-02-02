@@ -9,11 +9,10 @@ interface WallpaperContextType {
 
 const WallpaperContext = createContext<WallpaperContextType | undefined>(undefined);
 
-// Aesthetic wallpaper URLs from Unsplash
+// Nature wallpaper URLs from Unsplash
 const wallpapers = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80', // Mountains
   'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1920&q=80', // Nature sunset
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80', // Abstract
   'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1920&q=80', // Ocean waves
   'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1920&q=80', // Foggy mountains
   'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80', // Forest sunlight
@@ -21,6 +20,9 @@ const wallpapers = [
   'https://images.unsplash.com/photo-1505144808419-1957a94ca61e?w=1920&q=80', // Beach sunset
   'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80', // Starry mountains
   'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1920&q=80', // Snow peaks
+  'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=1920&q=80', // Green valley
+  'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=1920&q=80', // Meadow hills
+  'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1920&q=80', // Desert dunes
 ];
 
 const getRandomWallpaper = () => {
