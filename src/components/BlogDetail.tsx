@@ -44,7 +44,12 @@ const BlogDetail = ({ blog, onBack, onEdit, onDelete }: BlogDetailProps) => {
 
       <header className="mb-8">
         <time className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-          {format(blog.createdAt, 'MMMM d, yyyy')}
+          {format(blog.createdAt, 'MMMM d, yyyy · h:mm a')}
+          {blog.updatedAt > blog.createdAt && (
+            <span className="ml-2 normal-case text-xs">
+              (Updated: {format(blog.updatedAt, 'MMM d, yyyy · h:mm a')})
+            </span>
+          )}
         </time>
         <h1 className="mt-3 font-serif text-4xl font-bold text-foreground leading-tight">
           {blog.title}
