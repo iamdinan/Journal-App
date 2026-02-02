@@ -10,6 +10,7 @@ interface BlogContextType {
 }
 
 const BlogContext = createContext<BlogContextType | undefined>(undefined);
+BlogContext.displayName = 'BlogContext';
 
 const generateExcerpt = (content: string, maxLength = 150) => {
   if (content.length <= maxLength) return content;
