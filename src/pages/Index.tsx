@@ -45,7 +45,7 @@ const Index = () => {
   // Wallpaper background style
   const wallpaperStyle = wallpaperEnabled
     ? {
-        backgroundImage: `linear-gradient(to bottom, hsl(var(--background) / 0.85), hsl(var(--background) / 0.95)), url(${currentWallpaper})`,
+        backgroundImage: `linear-gradient(to bottom, hsl(var(--background) / 0.7), hsl(var(--background) / 0.8)), url(${currentWallpaper})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
