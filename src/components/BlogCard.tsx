@@ -19,7 +19,7 @@ const BlogCard = ({ blog, onEdit, onDelete, onClick }: BlogCardProps) => {
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <time className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            {format(blog.createdAt, 'MMMM d, yyyy')}
+            {format(blog.createdAt, 'MMMM d, yyyy · h:mm a')}
           </time>
           <h2 className="mt-2 font-serif text-xl font-semibold text-foreground leading-tight group-hover:text-primary transition-colors">
             {blog.title}
