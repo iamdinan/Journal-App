@@ -8,6 +8,16 @@ import DeleteConfirmDialog from '@/components/DeleteConfirmDialog';
 import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { Plus, PenLine } from 'lucide-react';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+
+const POSTS_PER_PAGE = 5;
 
 const Index = () => {
   const { blogs, addBlog, updateBlog, deleteBlog } = useBlog();
@@ -16,6 +26,13 @@ const Index = () => {
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [blogToDelete, setBlogToDelete] = useState<Blog | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(blogs.length / POSTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+  const endIndex = startIndex + POSTS_PER_PAGE;
+  const currentBlogs = blogs.slice(startIndex, endIndex);
 
   const handleAddNew = () => {
     setEditingBlog(null);
@@ -110,7 +127,7 @@ const Index = () => {
         {/* Blog List */}
         {blogs.length > 0 ? (
           <div className="space-y-4">
-            {blogs.map((blog, index) => (
+            {currentBlogs.map((blog, index) => (
               <div
                 key={blog.id}
                 className="animate-fade-in"
@@ -124,6 +141,43 @@ const Index = () => {
                 />
               </div>
             ))}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <Pagination className="mt-8">
+                <PaginationContent>
+                  {currentPage > 1 && (
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                        className="cursor-pointer"
+                      />
+                    </PaginationItem>
+                  )}
+                  
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(page)}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  
+                  {currentPage < totalPages && (
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                        className="cursor-pointer"
+                      />
+                    </PaginationItem>
+                  )}
+                </PaginationContent>
+              </Pagination>
+            )}
           </div>
         ) : (
           <div className="text-center py-16">
