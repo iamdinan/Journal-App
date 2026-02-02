@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Blog } from '@/types/blog';
 import { useBlog } from '@/context/BlogContext';
+import { useWallpaper } from '@/context/WallpaperContext';
 import BlogCard from '@/components/BlogCard';
 import BlogForm from '@/components/BlogForm';
 import BlogDetail from '@/components/BlogDetail';
 import DeleteConfirmDialog from '@/components/DeleteConfirmDialog';
 import ThemeToggle from '@/components/ThemeToggle';
+import WallpaperToggle from '@/components/WallpaperToggle';
 import { Button } from '@/components/ui/button';
 import { Plus, PenLine } from 'lucide-react';
 import {
@@ -21,6 +23,7 @@ const POSTS_PER_PAGE = 5;
 
 const Index = () => {
   const { blogs, addBlog, updateBlog, deleteBlog } = useBlog();
+  const { wallpaperEnabled, currentWallpaper, refreshWallpaper } = useWallpaper();
   const [formOpen, setFormOpen] = useState(false);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
@@ -28,11 +31,26 @@ const Index = () => {
   const [blogToDelete, setBlogToDelete] = useState<Blog | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Refresh wallpaper when page changes
+  useEffect(() => {
+    refreshWallpaper();
+  }, [currentPage]);
+
   // Pagination calculations
   const totalPages = Math.ceil(blogs.length / POSTS_PER_PAGE);
   const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
   const endIndex = startIndex + POSTS_PER_PAGE;
   const currentBlogs = blogs.slice(startIndex, endIndex);
+
+  // Wallpaper background style
+  const wallpaperStyle = wallpaperEnabled
+    ? {
+        backgroundImage: `linear-gradient(to bottom, hsl(var(--background) / 0.85), hsl(var(--background) / 0.95)), url(${currentWallpaper})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }
+    : {};
 
   const handleAddNew = () => {
     setEditingBlog(null);
@@ -77,7 +95,7 @@ const Index = () => {
 
   if (selectedBlog) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background transition-all duration-500" style={wallpaperStyle}>
         <div className="container py-12 px-4 sm:px-6">
           <BlogDetail
             blog={selectedBlog}
@@ -103,7 +121,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background transition-all duration-500" style={wallpaperStyle}>
       <div className="container max-w-3xl py-12 px-4 sm:px-6">
         {/* Header */}
         <header className="flex items-center justify-between mb-12">
@@ -116,6 +134,7 @@ const Index = () => {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <WallpaperToggle />
             <ThemeToggle />
             <Button onClick={handleAddNew} className="gap-2">
             <Plus className="h-4 w-4" />
