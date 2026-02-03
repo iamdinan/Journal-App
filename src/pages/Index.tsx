@@ -22,7 +22,7 @@ import {
 const POSTS_PER_PAGE = 5;
 
 const Index = () => {
-  const { blogs, addBlog, updateBlog, deleteBlog } = useBlog();
+  const { blogs, loading, addBlog, updateBlog, deleteBlog } = useBlog();
   const { wallpaperEnabled, currentWallpaper, refreshWallpaper } = useWallpaper();
   const [formOpen, setFormOpen] = useState(false);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
@@ -67,9 +67,9 @@ const Index = () => {
     setDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (blogToDelete) {
-      deleteBlog(blogToDelete.id);
+      await deleteBlog(blogToDelete.id);
       if (selectedBlog?.id === blogToDelete.id) {
         setSelectedBlog(null);
       }
@@ -78,14 +78,14 @@ const Index = () => {
     setDeleteDialogOpen(false);
   };
 
-  const handleFormSubmit = (title: string, content: string) => {
+  const handleFormSubmit = async (title: string, content: string) => {
     if (editingBlog) {
-      updateBlog(editingBlog.id, title, content);
+      await updateBlog(editingBlog.id, title, content);
       if (selectedBlog?.id === editingBlog.id) {
         setSelectedBlog({ ...editingBlog, title, content });
       }
     } else {
-      addBlog(title, content);
+      await addBlog(title, content);
     }
   };
 
