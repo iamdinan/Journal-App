@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Blog } from '@/types/blog';
 import { useBlog } from '@/context/BlogContext';
 import { useWallpaper } from '@/context/WallpaperContext';
@@ -8,6 +8,8 @@ import BlogDetail from '@/components/BlogDetail';
 import DeleteConfirmDialog from '@/components/DeleteConfirmDialog';
 import ThemeToggle from '@/components/ThemeToggle';
 import WallpaperToggle from '@/components/WallpaperToggle';
+import QuoteCard from '@/components/QuoteCard';
+import SortFilter, { SortOrder } from '@/components/SortFilter';
 import { Button } from '@/components/ui/button';
 import { Plus, PenLine } from 'lucide-react';
 import {
@@ -30,17 +32,28 @@ const Index = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [blogToDelete, setBlogToDelete] = useState<Blog | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState<SortOrder>('newest');
 
   // Refresh wallpaper when page changes
   useEffect(() => {
     refreshWallpaper();
   }, [currentPage]);
 
+  // Sort and paginate blogs
+  const sortedBlogs = useMemo(() => {
+    const sorted = [...blogs].sort((a, b) => {
+      const dateA = new Date(a.created_at).getTime();
+      const dateB = new Date(b.created_at).getTime();
+      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+    return sorted;
+  }, [blogs, sortOrder]);
+
   // Pagination calculations
-  const totalPages = Math.ceil(blogs.length / POSTS_PER_PAGE);
+  const totalPages = Math.ceil(sortedBlogs.length / POSTS_PER_PAGE);
   const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
   const endIndex = startIndex + POSTS_PER_PAGE;
-  const currentBlogs = blogs.slice(startIndex, endIndex);
+  const currentBlogs = sortedBlogs.slice(startIndex, endIndex);
 
   // Wallpaper background style
   const wallpaperStyle = wallpaperEnabled
@@ -143,9 +156,15 @@ const Index = () => {
           </div>
         </header>
 
-        {/* Blog List */}
+        {/* Quote Card */}
+        <QuoteCard />
+
+        {/* Filter and Blog List */}
         {blogs.length > 0 ? (
           <div className="space-y-4">
+            <div className="flex justify-end mb-4">
+              <SortFilter value={sortOrder} onChange={setSortOrder} />
+            </div>
             {currentBlogs.map((blog, index) => (
               <div
                 key={blog.id}
