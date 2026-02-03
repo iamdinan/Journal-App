@@ -1,5 +1,5 @@
 import { Blog } from '@/types/blog';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -11,6 +11,10 @@ interface BlogDetailProps {
 }
 
 const BlogDetail = ({ blog, onBack, onEdit, onDelete }: BlogDetailProps) => {
+  const createdDate = typeof blog.created_at === 'string' ? parseISO(blog.created_at) : new Date(blog.created_at);
+  const updatedDate = typeof blog.updated_at === 'string' ? parseISO(blog.updated_at) : new Date(blog.updated_at);
+  const wasUpdated = updatedDate.getTime() > createdDate.getTime() + 1000; // 1 second buffer
+
   return (
     <article className="max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-8">
@@ -44,10 +48,10 @@ const BlogDetail = ({ blog, onBack, onEdit, onDelete }: BlogDetailProps) => {
 
       <header className="mb-8">
         <time className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-          {format(blog.createdAt, 'MMMM d, yyyy · h:mm a')}
-          {blog.updatedAt > blog.createdAt && (
+          {format(createdDate, 'MMMM d, yyyy · h:mm a')}
+          {wasUpdated && (
             <span className="ml-2 normal-case text-xs">
-              (Updated: {format(blog.updatedAt, 'MMM d, yyyy · h:mm a')})
+              (Updated: {format(updatedDate, 'MMM d, yyyy · h:mm a')})
             </span>
           )}
         </time>
